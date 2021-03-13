@@ -107,3 +107,21 @@ class GradOfBNQuant(Function):
 
 
 gbnquant = GradOfBNQuant.apply
+
+
+class ErrorQuant(Function):
+    @staticmethod
+    def forward(ctx, x, k):
+        r = 2**torch.round(x.abs().max().log2())
+        sc = r / 2**(k - 1)
+        cmp0 = ((x / sc).abs >= 1) * sc * torch.clamp(
+            (x / sc).round(), 1 - 2**(k - 1), 2**(k - 1) - 1)
+        cmp1 = ((x / sc).abs < 1) * directquant(x / sc, k)
+        return cmp1 + cmp0
+
+    @staticmethod
+    def backward(ctx, grad_out):
+        return grad_out
+
+
+errquant = ErrorQuant.apply
