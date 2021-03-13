@@ -6,15 +6,17 @@ Shown in the paper's Sec. III.C.
 import torch
 from torch.autograd import Function
 import math
+from _utils import number_to_tensor
 
 
 class StochasticRound(Function):
     @staticmethod
     def forward(ctx, x):
         x_shape = x.shape
+        eps = 1e-8
         x = x.reshape(-1, 1)
         choice = torch.cat((x.floor(), x.ceil()), dim=1)
-        weight = torch.cat((x.ceil() - x, x - x.floor()), dim=1)
+        weight = torch.cat((x.ceil() - x + eps, x + eps - x.floor()), dim=1)
         sample = torch.multinomial(weight, 1)
         idx = torch.cat((sample == 0, sample == 1), dim=1)
         x = choice[idx].reshape(x_shape)
@@ -75,3 +77,33 @@ class ShiftQuant(Function):
 
 
 shiftquant = ShiftQuant.apply
+
+
+class GradOfWeightQuant(Function):
+    @staticmethod
+    def forward(ctx, x, kgw, kdr):
+        ctx.save_for_backward(torch.tensor(kgw), torch.tensor(kdr))
+        return x
+
+    @staticmethod
+    def backward(ctx, grad_out):
+        kgw, kdr = ctx.saved_tensors
+        return constquant(grad_out, kdr, kgw), None, None
+
+
+gwquant = GradOfWeightQuant.apply
+
+
+class GradOfBNQuant(Function):
+    @staticmethod
+    def forward(ctx, x, k):
+        ctx.save_for_backward(torch.tensor(k))
+        return x
+
+    @staticmethod
+    def backward(ctx, grad_out):
+        k = ctx.saved_tensors[0]
+        return directquant(grad_out, k), None
+
+
+gbnquant = GradOfBNQuant.apply
