@@ -1,6 +1,6 @@
 # tqt.function code style
 
-All you need to follow is to change the upper case words and add you module! Then update the `./tqt.function/__init__.py` and `./tqt/wrapper.py`. 
+All you need to follow is to change the upper case words and add you module! Then update the `./wageubn.function/__init__.py`.
 
 ```py
 # filename: FILENAME.py

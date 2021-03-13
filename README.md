@@ -5,6 +5,7 @@ wageubn's pytorch implementation.
   - [Notice](#notice)
   - [wageubn's modules](#wageubns-modules)
     - [wageubn.function](#wageubnfunction)
+    - [wageubn.config](#wageubnconfig)
 - [Contributing](#contributing)
 - [Acknowledgment](#acknowledgment)
 
@@ -21,6 +22,11 @@ This repo is based on the same framework as [tqt](https://github.com/PannenetsF/
 `bit_width` has 2 type: weight/bias or activation. 
 
 If the `retrain` is `True`, the Module will be in Retrain Mode, with the `log2_t` trainable. Else, in Static Mode, the `log2_t` are determined by initialization and not trainable.
+
+### wageubn.config
+
+Config the bitwidth via `wageubn.config.Config` and `wageubn.config.network_config`. `wageubn.config.Config` is a namedtuple and you can set bitwidth as its key.
+
 
 # Contributing 
 
