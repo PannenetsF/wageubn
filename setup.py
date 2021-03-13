@@ -3,10 +3,9 @@
 import os
 from setuptools import setup
 
-# get key package details from tqt/__version__.py
 about = {}  # type: ignore
 here = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(here, 'tqt', '__version__.py')) as f:
+with open(os.path.join(here, 'wageubn', '__version__.py')) as f:
     exec(f.read(), about)
 
 # load the README file and use it as the long_description for PyPI
@@ -23,7 +22,7 @@ setup(name=about['__title__'],
       author=about['__author__'],
       author_email=about['__author_email__'],
       url=about['__url__'],
-      packages=['tqt'],
+      packages=['wageubn'],
       include_package_data=True,
       python_requires=">=3.7.*",
       install_requires=['torch'],
