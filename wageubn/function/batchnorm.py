@@ -36,13 +36,16 @@ class BatchNorm2d(nn.BatchNorm2d):
         if self.affine is True:
             weight = directquant(self.weight, self.weight_bit_width)
             bias = directquant(self.bias, self.bias_bit_width)
-            output = F.batch_norm(input,
-                                  running_mean=mean,
-                                  running_var=var,
-                                  weight=weight,
-                                  bias=bias)
+            output = directquant(
+                F.batch_norm(input,
+                             running_mean=mean,
+                             running_var=var,
+                             weight=weight,
+                             bias=bias), self.bn_bit_width)
         else:
-            output = F.batch_norm(input, running_mean=mean, running_var=var)
+            output = directquant(
+                F.batch_norm(input, running_mean=mean, running_var=var),
+                self.bn_bit_width)
         return output
 
     def forward(self, input):
