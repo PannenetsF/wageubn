@@ -13,6 +13,8 @@ wageubn's pytorch implementation.
 
 This repo is based on the same framework as [tqt](https://github.com/PannenetsF/TQT) and focuses on inferrence only. Even the quantized error and gradient could be got from `wageubn.function.errorquant` and `wageubn.function.gradquant`, we will not use them. If they are essential for your training, please fork this repo and wrap the `wageubn.function` modules with it.
 
+Now available at [https://pypi.org/project/wageubn/0.1.0/](https://pypi.org/project/wageubn/0.1.0/).
+
 ## wageubn's modules
 
 ### wageubn.function 
