@@ -20,6 +20,10 @@ class StochasticRound(Function):
         x = choice[idx].reshape(x_shape)
         return x
 
+    @staticmethod
+    def backward(ctx, grad_out):
+        return grad_out
+
 
 sround = StochasticRound.apply
 
@@ -30,6 +34,10 @@ class DirectQuant(Function):
         return torch.clamp(
             torch.round(x * 2**(k - 1)) / 2**(k - 1), -2**(k - 1) + 1,
             2**(k - 1) - 1)
+
+    @staticmethod
+    def backward(ctx, grad_out):
+        return grad_out, None
 
 
 directquant = DirectQuant.apply
@@ -44,6 +52,10 @@ class ConstQuant(Function):
         sd = torch.clamp(sround(dr * norm), -dr + 1, dr - 1)
         return sd / 2**(k - 1)
 
+    @staticmethod
+    def backward(ctx, grad_out):
+        return grad_out, None, None
+
 
 constquant = ConstQuant.apply
 
@@ -57,16 +69,9 @@ class ShiftQuant(Function):
         sq = r * torch.clamp(directquant(norm, k), -1 + dk, 1 - dk)
         return sq
 
+    @staticmethod
+    def backward(ctx, grad_out):
+        return grad_out, None
+
 
 shiftquant = ShiftQuant.apply
-
-if __name__ == '__main__':
-    # x = torch.rand(2, 3, 2) * 300 - 150
-    x = torch.rand(2, 3, 2)
-    print('sround', x.flatten() - sround(x).flatten(), sep='\n')
-    print('dquant', x.flatten(), directquant(x, 8).flatten(), sep='\n')
-    print('cquant',
-          x.flatten(),
-          constquant(x, 8, 8).flatten() * 2**7,
-          sep='\n')
-    print('squant', x.flatten(), shiftquant(x, 8).flatten(), sep='\n')
