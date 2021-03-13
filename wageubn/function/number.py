@@ -6,7 +6,7 @@ Shown in the paper's Sec. III.C.
 import torch
 from torch.autograd import Function
 import math
-from _utils import number_to_tensor
+from ._utils import number_to_tensor
 
 
 class StochasticRound(Function):
