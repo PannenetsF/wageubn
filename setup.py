@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 about = {}  # type: ignore
 here = os.path.abspath(os.path.dirname(__file__))
@@ -22,7 +22,7 @@ setup(name=about['__title__'],
       author=about['__author__'],
       author_email=about['__author_email__'],
       url=about['__url__'],
-      packages=['wageubn'],
+      packages=find_packages(where='.', exclude=(), include=('*', )),
       include_package_data=True,
       python_requires=">=3.7.*",
       install_requires=['torch'],
