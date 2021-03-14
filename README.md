@@ -15,6 +15,8 @@ This repo is based on the same framework as [tqt](https://github.com/PannenetsF/
 
 Now available at [https://pypi.org/project/wageubn/0.1.0/](https://pypi.org/project/wageubn/0.1.0/).
 
+Networks quantized via this package could be find at [https://github.com/PannenetsF/QuantizationPool](https://github.com/PannenetsF/QuantizationPool).
+
 ## wageubn's modules
 
 ### wageubn.function 
