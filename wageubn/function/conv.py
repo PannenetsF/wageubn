@@ -37,7 +37,7 @@ class Conv2d(nn.Conv2d):
         self.weight_bit_width = weight_bit_width
         self.bias_bit_width = bias_bit_width
         self.input_bit_width = input_bit_width
-        self.output_bit_width = self.output_bit_width
+        self.output_bit_width = output_bit_width
         self.iostrict = iostrict
 
     def conv_forward(self, input):
@@ -48,7 +48,7 @@ class Conv2d(nn.Conv2d):
         else:
             bias = directquant(self.bias, self.bias_bit_width)
         weight = directquant(self.weight, self.weight_bit_width)
-        output F.conv2d(input, weight, bias, self.stride, self.padding,
+        output = F.conv2d(input, weight, bias, self.stride, self.padding,
                         self.dilation, self.groups)
         if self.iostrict is True:
             output = directquant(output, self.output_bit_width)

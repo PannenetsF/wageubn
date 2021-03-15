@@ -17,7 +17,7 @@ class ReLU(nn.ReLU):
                  iostrict=False):
         super().__init__(inplace)
         self.acti_bit_width = acti_bit_width
-        self.acti_input_bit_width = acti_input_bit_width
+        self.input_bit_width = input_bit_width
         self.iostrict = iostrict
 
     def relu_forward(self, input):
