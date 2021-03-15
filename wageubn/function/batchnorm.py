@@ -20,7 +20,9 @@ class BatchNorm2d(nn.BatchNorm2d):
                  bias_bit_width=8,
                  mean_bit_width=8,
                  var_bit_width=8,
-                 bn_bit_width=8):
+                 bn_bit_width=8,
+                 input_bit_width=8,
+                 iostrict=False):
         super().__init__(num_features, eps, momentum, affine,
                          track_running_stats)
 
@@ -29,8 +31,12 @@ class BatchNorm2d(nn.BatchNorm2d):
         self.mean_bit_width = mean_bit_width
         self.var_bit_width = var_bit_width
         self.bn_bit_width = bn_bit_width
+        self.input_bit_width = input_bit_width
+        self.iostrict = iostrict
 
     def bn_forward(self, input):
+        if self.iostrict is True:
+            input = directquant(input, self.input_bit_width)
         mean = directquant(self.running_mean, self.mean_bit_width)
         var = directquant(self.running_var, self.var_bit_width)
         if self.affine is True:
