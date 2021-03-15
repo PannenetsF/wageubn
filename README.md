@@ -31,6 +31,8 @@ If the `retrain` is `True`, the Module will be in Retrain Mode, with the `log2_t
 
 Config the bitwidth via `wageubn.config.Config` and `wageubn.config.network_config`. `wageubn.config.Config` is a namedtuple and you can set bitwidth as its key.
 
+With more consideration of hardware implement, the input and output of any module should be FIXED(or quantized). So there is a `iostrict` attribute to do this.
+
 
 # Contributing 
 
