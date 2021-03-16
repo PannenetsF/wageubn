@@ -12,26 +12,26 @@ Config = namedtuple('config', [
 
 def config_bn(proc, config, bn_list):
     if _isinstance(proc, bn_list):
-        proc.weight_bit_width = config.bn_weight
-        proc.bias_bit_width = config.bn_bias
-        proc.mean_bit_width = config.bn_mean
-        proc.var_bit_width = config.bn_var
-        proc.bn_bit_width = config.bn_out
-        proc.input_bit_width = config.bn_in
+        proc.weight_dec_bit_width = config.bn_weight
+        proc.bias_dec_bit_width = config.bn_bias
+        proc.mean_dec_bit_width = config.bn_mean
+        proc.var_dec_bit_width = config.bn_var
+        proc.output_dec_bit_width = config.bn_out
+        proc.input_dec_bit_width = config.bn_in
 
 
 def config_acti(proc, config, acti_list):
     if _isinstance(proc, acti_list):
-        proc.acti_bit_width = config.acti
-        proc.input_bit_width = config.acti_in
+        proc.acti_dec_bit_width = config.acti
+        proc.input_dec_bit_width = config.acti_in
 
 
 def config_conv_linear(proc, config, conv_linear_list):
     if _isinstance(proc, conv_linear_list):
-        proc.weight_bit_width = config.conv_and_linear_weight
-        proc.bias_bit_width = config.conv_and_linear_bias
-        proc.input_bit_width = config.conv_and_linear_in
-        proc.output_bit_width = config.conv_and_linear_out
+        proc.weight_dec_bit_width = config.conv_and_linear_weight
+        proc.bias_dec_bit_width = config.conv_and_linear_bias
+        proc.input_dec_bit_width = config.conv_and_linear_in
+        proc.output_dec_bit_width = config.conv_and_linear_out
 
 
 def config_io(proc, config):

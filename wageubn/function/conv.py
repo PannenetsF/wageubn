@@ -20,10 +20,10 @@ class Conv2d(nn.Conv2d):
                  groups=1,
                  bias=True,
                  padding_mode='zeros',
-                 weight_bit_width=8,
-                 bias_bit_width=16,
-                 input_bit_width=8,
-                 output_bit_width=12,
+                 weight_dec_bit_width=8,
+                 bias_dec_bit_width=16,
+                 input_dec_bit_width=8,
+                 output_dec_bit_width=12,
                  iostrict=False):
         super().__init__(in_channels=in_channels,
                          out_channels=out_channels,
@@ -34,24 +34,24 @@ class Conv2d(nn.Conv2d):
                          groups=groups,
                          bias=bias,
                          padding_mode=padding_mode)
-        self.weight_bit_width = weight_bit_width
-        self.bias_bit_width = bias_bit_width
-        self.input_bit_width = input_bit_width
-        self.output_bit_width = output_bit_width
+        self.weight_dec_bit_width = weight_dec_bit_width
+        self.bias_dec_bit_width = bias_dec_bit_width
+        self.input_dec_bit_width = input_dec_bit_width
+        self.output_dec_bit_width = output_dec_bit_width
         self.iostrict = iostrict
 
     def conv_forward(self, input):
         if self.iostrict is True:
-            input = directquant(input, self.input_bit_width)
+            input = directquant(input, self.input_dec_bit_width)
         if self.bias is None:
             bias = None
         else:
-            bias = directquant(self.bias, self.bias_bit_width)
-        weight = directquant(self.weight, self.weight_bit_width)
+            bias = directquant(self.bias, self.bias_dec_bit_width)
+        weight = directquant(self.weight, self.weight_dec_bit_width)
         output = F.conv2d(input, weight, bias, self.stride, self.padding,
-                        self.dilation, self.groups)
+                          self.dilation, self.groups)
         if self.iostrict is True:
-            output = directquant(output, self.output_bit_width)
+            output = directquant(output, self.output_dec_bit_width)
         return output
 
     def forward(self, input):
