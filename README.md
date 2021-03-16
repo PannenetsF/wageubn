@@ -6,6 +6,7 @@ wageubn's pytorch implementation.
   - [wageubn's modules](#wageubns-modules)
     - [wageubn.function](#wageubnfunction)
     - [wageubn.config](#wageubnconfig)
+  - [wageubn's problem](#wageubns-problem)
 - [Contributing](#contributing)
 - [Acknowledgment](#acknowledgment)
 
@@ -33,6 +34,9 @@ Config the bitwidth via `wageubn.config.Config` and `wageubn.config.network_conf
 
 With more consideration of hardware implement, the input and output of any module should be FIXED(or quantized). So there is a `iostrict` attribute to do this.
 
+## wageubn's problem 
+
+`iostrict` is one part as stated in [last section](#wageubnconfig). The paper uses `directquant` almost everywhere, which turns to a new problem: the given k is not the bitwidth of data. It's just the width of the decimal. As a result, I decide to add more attribute to control the module's real bitwidth.
 
 # Contributing 
 
