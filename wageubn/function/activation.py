@@ -22,7 +22,7 @@ class ReLU(nn.ReLU):
 
     def relu_forward(self, input):
         if self.iostrict is True:
-            input = directquant(input, self.acti_input_bit_width)
+            input = directquant(input, self.input_bit_width)
         return directquant(F.relu(input), self.acti_bit_width)
 
     def forward(self, input):

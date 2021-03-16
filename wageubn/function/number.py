@@ -34,8 +34,8 @@ class DirectQuant(Function):
     @staticmethod
     def forward(ctx, x, k):
         return torch.clamp(
-            torch.round(x * 2**(k - 1)) / 2**(k - 1), -2**(k - 1) + 1,
-            2**(k - 1) - 1)
+            torch.round(x * 2**(k - 1)) / 2**(k - 1), 1 / 2**(k - 1) - 1,
+            -1 / 2**(k - 1) + 1)
 
     @staticmethod
     def backward(ctx, grad_out):
