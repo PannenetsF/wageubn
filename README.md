@@ -36,7 +36,7 @@ With more consideration of hardware implement, the input and output of any modul
 
 ## wageubn's problem 
 
-`iostrict` is one part as stated in [last section](#wageubnconfig). The paper uses `directquant` almost everywhere, which turns to a new problem: the given k is not the bitwidth of data. It's just the width of the decimal. As a result, I decide to add more attribute to control the module's real bitwidth.
+`iostrict` is one part as stated in [last section](#wageubnconfig). The paper uses `directquant` almost everywhere, which turns to a new problem: the given k is not the bitwidth of data. It's just the width of the decimal. As a result, I decide to add more attribute to control the module's real bitwidth `real_*` for each part.
 
 # Contributing 
 
