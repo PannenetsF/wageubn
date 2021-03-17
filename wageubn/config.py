@@ -5,9 +5,27 @@ from .utils import _isinstance
 Config = namedtuple('config', [
     'iostrict', 'conv_and_linear_weight', 'conv_and_linear_bias',
     'conv_and_linear_in', 'conv_and_linear_out', 'bn_weight', 'bn_bias',
-    'bn_mean', 'bn_var', 'bn_in', 'bn_out', 'acti_in', 'acti'
+    'bn_mean', 'bn_var', 'bn_in', 'bn_out', 'acti_in', 'acti',
+    'conv_and_linear_weight_all', 'conv_and_linear_bias_all',
+    'conv_and_linear_in_all', 'conv_and_linear_out_all', 'bn_weight_all',
+    'bn_bias_all', 'bn_mean_all', 'bn_var_all', 'bn_in_all', 'bn_out_all',
+    'acti_in_all', 'acti_all'
 ],
-                    defaults=[False, 8, 8, 8, 12, 8, 8, 8, 8, 12, 8, 8, 8])
+                    defaults=[
+                        False,
+                        8,
+                        8,
+                        8,
+                        12,
+                        8,
+                        8,
+                        8,
+                        8,
+                        12,
+                        8,
+                        8,
+                        8,
+                    ])
 
 
 def config_bn(proc, config, bn_list):
