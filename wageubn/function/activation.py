@@ -21,7 +21,7 @@ class ReLU(nn.ReLU):
         self.acti_dec_bit_width = acti_dec_bit_width
         self.input_dec_bit_width = input_dec_bit_width
         self.acti_all_bit_width = acti_all_bit_width 
-        self.input_all_bit_width input_all_bit_width 
+        self.input_all_bit_width = input_all_bit_width 
         self.iostrict = iostrict
 
     def relu_forward(self, input):
