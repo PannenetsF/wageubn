@@ -20,14 +20,16 @@ class ReLU(nn.ReLU):
         super().__init__(inplace)
         self.acti_dec_bit_width = acti_dec_bit_width
         self.input_dec_bit_width = input_dec_bit_width
-        self.acti_all_bit_width = acti_all_bit_width 
-        self.input_all_bit_width = input_all_bit_width 
+        self.acti_all_bit_width = acti_all_bit_width
+        self.input_all_bit_width = input_all_bit_width
         self.iostrict = iostrict
 
     def relu_forward(self, input):
         if self.iostrict is True:
-            input = alldirectquant(input, self.input_dec_bit_width, self.input_all_bit_width)
-        return alldirectquant(F.relu(input), self.acti_dec_bit_width, self.acti_all_bit_width)
+            input = alldirectquant(input, self.input_dec_bit_width,
+                                   self.input_all_bit_width)
+        return alldirectquant(F.relu(input), self.acti_dec_bit_width,
+                              self.acti_all_bit_width)
 
     def forward(self, input):
         return self.relu_forward(input)
@@ -44,14 +46,16 @@ class ReLU6(nn.ReLU):
         super().__init__(inplace)
         self.acti_dec_bit_width = acti_dec_bit_width
         self.input_dec_bit_width = input_dec_bit_width
-        self.acti_all_bit_width = acti_all_bit_width 
-        self.input_all_bit_width input_all_bit_width 
+        self.acti_all_bit_width = acti_all_bit_width
+        self.input_all_bit_width = input_all_bit_width
         self.iostrict = iostrict
 
     def relu6_forward(self, input):
         if self.iostrict is True:
-            input = alldirectquant(input, self.input_dec_bit_width, self.input_all_bit_width)
-        return alldirectquant(F.relu6(input), self.acti_dec_bit_width, self.acti_all_bit_width)
+            input = alldirectquant(input, self.input_dec_bit_width,
+                                   self.input_all_bit_width)
+        return alldirectquant(F.relu6(input), self.acti_dec_bit_width,
+                              self.acti_all_bit_width)
 
     def forward(self, input):
         return self.relu6_forward(input)
