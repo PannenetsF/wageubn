@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from .number import directquant
+from .number import directquant, alldirectquant
 
 
 class Linear(nn.Linear):
@@ -18,8 +18,16 @@ class Linear(nn.Linear):
                  bias_dec_bit_width=16,
                  input_dec_bit_width=8,
                  output_dec_bit_width=12,
+                 weight_all_bit_width=8,
+                 bias_all_bit_width=16,
+                 input_all_bit_width=8,
+                 output_all_bit_width=12,
                  iostrict=False):
         super().__init__(in_features, out_features, bias=bias)
+        self.weight_all_bit_width = weight_all_bit_width
+        self.bias_all_bit_width = bias_all_bit_width
+        self.input_all_bit_width = input_all_bit_width
+        self.output_all_bit_width = self.output_all_bit_width
         self.weight_dec_bit_width = weight_dec_bit_width
         self.bias_dec_bit_width = bias_dec_bit_width
         self.input_dec_bit_width = input_dec_bit_width
@@ -28,15 +36,15 @@ class Linear(nn.Linear):
 
     def linear_forward(self, input):
         if self.iostrict is True:
-            input = directquant(input, self.input_dec_bit_width)
+            input = alldirectquant(input, self.input_dec_bit_width, self.input_all_bit_width)
         if self.bias is None:
             bias = None
         else:
-            bias = directquant(self.bias, self.bias_dec_bit_width)
-        weight = directquant(self.weight, self.weight_dec_bit_width)
+            bias = alldirectquant(self.bias, self.bias_dec_bit_width, self.bias_all_bit_width)
+        weight = alldirectquant(self.weight, self.weight_dec_bit_width, self.weight_all_bit_width)
         output = F.linear(input, weight, bias)
         if self.iostrict is True:
-            output = directquant(output, self.output_dec_bit_width)
+            output = alldirectquant(output, self.output_dec_bit_width, self.output_all_bit_width)
         return output
 
     def forward(self, input):

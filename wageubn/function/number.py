@@ -42,19 +42,22 @@ class DirectQuant(Function):
 
 directquant = DirectQuant.apply
 
+
 class AllDirectQuant(Function):
     @staticmethod
     def forward(ctx, x, kdec, kall):
-        n = - 2 ** (kall - 1) + 1
-        p = 2 ** (kall - 1) - 1
-        x = torch.round(x * 2 ** (kdec - 1))  
-        return torch.clamp(x, n, p) / 2 ** (kdec - 1)
+        n = -2**(kall - 1) + 1
+        p = 2**(kall - 1) - 1
+        x = torch.round(x * 2**(kdec - 1))
+        return torch.clamp(x, n, p) / 2**(kdec - 1)
 
     @staticmethod
     def backward(ctx, grad_out):
         return grad_out, None
 
+
 alldirectquant = AllDirectQuant.apply
+
 
 class ConstQuant(Function):
     @staticmethod
