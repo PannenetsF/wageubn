@@ -37,11 +37,21 @@ def config_bn(proc, config, bn_list):
         proc.output_dec_bit_width = config.bn_out
         proc.input_dec_bit_width = config.bn_in
 
+        proc.weight_all_bit_width = config.bn_weight_all
+        proc.bias_all_bit_width = config.bn_bias_all
+        proc.mean_all_bit_width = config.bn_mean_all
+        proc.var_all_bit_width = config.bn_var_all
+        proc.output_all_bit_width = config.bn_out_all
+        proc.input_all_bit_width = config.bn_in_all
+
 
 def config_acti(proc, config, acti_list):
     if _isinstance(proc, acti_list):
         proc.acti_dec_bit_width = config.acti
         proc.input_dec_bit_width = config.acti_in
+
+        proc.acti_all_bit_width = config.acti_all
+        proc.input_all_bit_width = config.acti_in_all
 
 
 def config_conv_linear(proc, config, conv_linear_list):
@@ -50,6 +60,11 @@ def config_conv_linear(proc, config, conv_linear_list):
         proc.bias_dec_bit_width = config.conv_and_linear_bias
         proc.input_dec_bit_width = config.conv_and_linear_in
         proc.output_dec_bit_width = config.conv_and_linear_out
+
+        proc.weight_all_bit_width = config.conv_and_linear_weight_all
+        proc.bias_all_bit_width = config.conv_and_linear_bias_all
+        proc.input_all_bit_width = config.conv_and_linear_in_all
+        proc.output_all_bit_width = config.conv_and_linear_out_all
 
 
 def config_io(proc, config):
