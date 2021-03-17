@@ -1,5 +1,6 @@
 from collections import namedtuple
 import torch.nn as nn
+from . import function as wnn
 from .utils import _isinstance
 
 Config = namedtuple('config', [
@@ -71,14 +72,15 @@ def config_io(proc, config):
     proc.iostrict = config.iostrict
 
 
-def config_network(
-        net,
-        name,
-        config,
-        bn_list=[nn.BatchNorm1d, nn.BatchNorm2d, nn.BatchNorm3d],
-        acti_list=[nn.ReLU, nn.ReLU6],
-        conv_linear_list=[nn.Conv1d, nn.Conv2d, nn.Conv3d, nn.Linear],
-        show=False):
+def config_network(net,
+                   name,
+                   config,
+                   bn_list=[nn.BatchNorm1d, nn.BatchNorm2d, nn.BatchNorm3d],
+                   acti_list=[nn.ReLU, nn.ReLU6],
+                   conv_linear_list=[
+                       nn.Conv1d, nn.Conv2d, nn.Conv3d, nn.Linear, wnn.Adder2d
+                   ],
+                   show=False):
     proc_list = list(net._modules.keys())
     if proc_list == []:
         if show:
