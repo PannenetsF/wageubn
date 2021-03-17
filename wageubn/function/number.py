@@ -32,12 +32,12 @@ sround = StochasticRound.apply
 
 class DirectQuant(Function):
     @staticmethod
-    def forward(ctx, x, k):
+    def forward(ctx, x, k, k_=0):
         return torch.round(x * 2**(k - 1)) / 2**(k - 1)
 
     @staticmethod
     def backward(ctx, grad_out):
-        return grad_out, None
+        return grad_out, None, None
 
 
 directquant = DirectQuant.apply
@@ -53,7 +53,7 @@ class AllDirectQuant(Function):
 
     @staticmethod
     def backward(ctx, grad_out):
-        return grad_out, None
+        return grad_out, None, None
 
 
 alldirectquant = AllDirectQuant.apply
@@ -78,7 +78,7 @@ constquant = ConstQuant.apply
 
 class ShiftQuant(Function):
     @staticmethod
-    def forward(ctx, x, k):
+    def forward(ctx, x, k, k_=0):
         r = 2**torch.round(x.abs().max().log2())
         norm = x / r
         dk = 1 / 2**(k - 1)
@@ -87,7 +87,7 @@ class ShiftQuant(Function):
 
     @staticmethod
     def backward(ctx, grad_out):
-        return grad_out, None
+        return grad_out, None, None
 
 
 shiftquant = ShiftQuant.apply
@@ -95,13 +95,13 @@ shiftquant = ShiftQuant.apply
 
 class WeightQuant(Function):
     @staticmethod
-    def forward(ctx, x, k):
+    def forward(ctx, x, k, k_=0):
         return torch.clamp(DirectQuant(x, k), 1 / 2**(k - 1) - 1,
                            -1 / 2**(k - 1) + 1)
 
     @staticmethod
     def backward(ctx, grad_out):
-        return grad_out, None
+        return grad_out, None, None
 
 
 weightquant = WeightQuant.apply
@@ -124,14 +124,14 @@ gwquant = GradOfWeightQuant.apply
 
 class GradOfBNQuant(Function):
     @staticmethod
-    def forward(ctx, x, k):
+    def forward(ctx, x, k, k_=0):
         ctx.save_for_backward(torch.tensor(k))
         return x
 
     @staticmethod
     def backward(ctx, grad_out):
         k = ctx.saved_tensors[0]
-        return directquant(grad_out, k), None
+        return directquant(grad_out, k), None, None
 
 
 gbnquant = GradOfBNQuant.apply
@@ -139,7 +139,7 @@ gbnquant = GradOfBNQuant.apply
 
 class ErrorQuant(Function):
     @staticmethod
-    def forward(ctx, x, k):
+    def forward(ctx, x, k, k_):
         r = 2**torch.round(x.abs().max().log2())
         sc = r / 2**(k - 1)
         cmp0 = ((x / sc).abs >= 1) * sc * torch.clamp(
@@ -149,7 +149,7 @@ class ErrorQuant(Function):
 
     @staticmethod
     def backward(ctx, grad_out):
-        return grad_out
+        return grad_out, None, None
 
 
 errquant = ErrorQuant.apply
