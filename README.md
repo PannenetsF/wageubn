@@ -7,6 +7,9 @@ wageubn's pytorch implementation.
     - [wageubn.function](#wageubnfunction)
     - [wageubn.config](#wageubnconfig)
   - [wageubn's problem](#wageubns-problem)
+  - [Supplement](#supplement)
+    - [Where is the hardware-precision error, update and gradient?](#where-is-the-hardware-precision-error-update-and-gradient)
+    - [How to get the data width of a tensor?](#how-to-get-the-data-width-of-a-tensor)
 - [Contributing](#contributing)
 - [Acknowledgment](#acknowledgment)
 
@@ -37,6 +40,16 @@ With more consideration of hardware implement, the input and output of any modul
 ## wageubn's problem 
 
 `iostrict` is one part as stated in [last section](#wageubnconfig). The paper uses `directquant` almost everywhere, which turns to a new problem: the given k is not the bitwidth of data. It's just the width of the decimal. As a result, I decide to add more attribute to control the module's real bitwidth `real_*` for each part.
+
+## Supplement
+
+### Where is the hardware-precision error, update and gradient?
+
+In the PyTorch framework, it's not easy to do the **real** quantization now. We cannot get gradient for int-like data type, for example. And there are more essential problems like overflow (no matter how careful you are to make the quantization via float) or truncation error, unless the network could rewrite all operations in CUDA or C++. But it requires much more effort than I can afford now. 
+
+### How to get the data width of a tensor?
+
+In fact, wageubn does the simplest work: get the data, train and eval based on the given bit width. But how to get the bit width is not mentioned. So we can say, under a given bit width (like 8), we need manually find the fixed point's place for each operations or even each layer. Then I will turn to TQT to do more work.
 
 # Contributing 
 
