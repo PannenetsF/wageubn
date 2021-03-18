@@ -45,21 +45,22 @@ class BatchNorm2d(nn.BatchNorm2d):
         self.output_all_bit_width = output_all_bit_width
         self.input_all_bit_width = input_all_bit_width
         self.iostrict = iostrict
+        self.quant = alldirectquant if self.iostrict else directquant
 
     def bn_forward(self, input):
         if self.iostrict is True:
-            input = alldirectquant(input, self.input_dec_bit_width,
+            input = self.quant(input, self.input_dec_bit_width,
                                    self.input_all_bit_width)
-        mean = alldirectquant(self.running_mean, self.mean_dec_bit_width,
+        mean = self.quant(self.running_mean, self.mean_dec_bit_width,
                               self.mean_all_bit_width)
-        var = alldirectquant(self.running_var, self.var_dec_bit_width,
+        var = self.quant(self.running_var, self.var_dec_bit_width,
                              self.var_all_bit_width)
         if self.affine is True:
-            weight = alldirectquant(self.weight, self.weight_dec_bit_width,
+            weight = self.quant(self.weight, self.weight_dec_bit_width,
                                     self.weight_all_bit_width)
-            bias = alldirectquant(self.bias, self.bias_dec_bit_width,
+            bias = self.quant(self.bias, self.bias_dec_bit_width,
                                   self.bias_all_bit_width)
-            output = alldirectquant(
+            output = self.quant(
                 F.batch_norm(input,
                              running_mean=mean,
                              running_var=var,
@@ -67,7 +68,7 @@ class BatchNorm2d(nn.BatchNorm2d):
                              bias=bias), self.output_dec_bit_width,
                 self.output_all_bit_width)
         else:
-            output = alldirectquant(
+            output = self.quant(
                 F.batch_norm(input, running_mean=mean, running_var=var),
                 self.output_dec_bit_width, self.output_all_bit_width)
         return output

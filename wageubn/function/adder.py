@@ -43,17 +43,18 @@ class Adder2d(ex.Adder2d):
         self.input_dec_bit_width = input_dec_bit_width
         self.output_dec_bit_width = output_dec_bit_width
         self.iostrict = iostrict
+        self.quant = alldirectquant if self.iostrict else directquant
 
     def adder_forward(self, input):
         if self.iostrict is True:
-            input = alldirectquant(input, self.input_dec_bit_width,
+            input = self.quant(input, self.input_dec_bit_width,
                                    self.input_all_bit_width)
         if self.bias is None:
             bias = None
         else:
-            bias = alldirectquant(self.bias, self.bias_dec_bit_width,
+            bias = self.quant(self.bias, self.bias_dec_bit_width,
                                   self.bias_all_bit_width)
-        weight = alldirectquant(self.weight, self.weight_dec_bit_width,
+        weight = self.quant(self.weight, self.weight_dec_bit_width,
                                 self.weight_all_bit_width)
         output = ex.adder2d_function(input,
                                      weight,
@@ -61,7 +62,7 @@ class Adder2d(ex.Adder2d):
                                      stride=self.stride,
                                      padding=self.padding)
         if self.iostrict is True:
-            output = alldirectquant(output, self.output_dec_bit_width,
+            output = self.quant(output, self.output_dec_bit_width,
                                     self.output_all_bit_width)
         return output
 
